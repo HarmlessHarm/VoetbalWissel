@@ -6,6 +6,7 @@ A web application for football coaches to manage their teams, create formations,
 
 - **Framework:** Next.js 16 with TypeScript
 - **Database:** Supabase (PostgreSQL)
+- **ORM:** Drizzle ORM
 - **Authentication:** Supabase Auth
 - **Styling:** Tailwind CSS
 - **Hosting:** Vercel
@@ -44,9 +45,22 @@ Edit `.env.local` and add your Supabase credentials:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your-project-url.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+DATABASE_URL=postgresql://postgres:your-db-password@db.your-project-ref.supabase.co:5432/postgres
 ```
 
-### 4. Run Development Server
+**Note:** Get your database password from Supabase Dashboard → Project Settings → Database
+
+### 4. Set Up Database Schema
+
+Run the database migrations using Drizzle:
+
+```bash
+npm run db:push
+```
+
+Or manually run the SQL files in Supabase SQL Editor (see [DRIZZLE_GUIDE.md](./DRIZZLE_GUIDE.md) for details).
+
+### 5. Run Development Server
 
 ```bash
 npm run dev
@@ -90,25 +104,43 @@ See [DESIGN.md](./DESIGN.md) for the complete design document and development ro
 
 ## Available Scripts
 
+### Development
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
 
+### Database (Drizzle ORM)
+- `npm run db:generate` - Generate migrations from schema changes
+- `npm run db:push` - Push schema changes to database
+- `npm run db:migrate` - Run pending migrations
+- `npm run db:studio` - Open Drizzle Studio (visual database browser)
+
+See [DRIZZLE_GUIDE.md](./DRIZZLE_GUIDE.md) for detailed Drizzle ORM usage.
+
 ## Database Setup
 
-After setting up your Supabase project, you'll need to create the database schema. Follow the detailed guide in [supabase/SETUP.md](./supabase/SETUP.md).
+This project uses **Drizzle ORM** for type-safe database operations and migrations.
 
-The schema includes:
-- Teams
-- Players
-- Games
-- Game Lineups
-- Lineup Positions
-- Substitutions
-- Player Availability
+### Quick Start
+```bash
+npm run db:push
+```
 
-See [DESIGN.md](./DESIGN.md) for the complete data model.
+### Schema Overview
+The database includes 7 tables:
+- **Teams** - Team information
+- **Players** - Player roster
+- **Games** - Game/match information
+- **Game Lineups** - Formation setups
+- **Lineup Positions** - Player positions in formations
+- **Substitutions** - Player substitutions during games
+- **Player Availability** - Player availability per game
+
+### Documentation
+- [DRIZZLE_GUIDE.md](./DRIZZLE_GUIDE.md) - Complete Drizzle ORM usage guide
+- [supabase/SETUP.md](./supabase/SETUP.md) - Alternative manual setup guide
+- [DESIGN.md](./DESIGN.md) - Complete data model and design decisions
 
 ## Deployment
 
